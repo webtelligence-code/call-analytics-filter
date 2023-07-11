@@ -2,7 +2,7 @@
   "name": "call-analytics-filter",
   "version": "0.1.0",
   "private": true,
-  "homepage": "GAP/NovasPlataformas/call-analytics",
+  "homepage": "GAP/NovasPlataformas/call-analytics-filter",
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.4.0",
     "@fortawesome/free-solid-svg-icons": "^6.4.0",
@@ -10,6 +10,7 @@
     "antd": "^5.5.1",
     "axios": "^1.4.0",
     "bootstrap": "^5.2.3",
+    "chalk": "^5.3.0",
     "react": "^18.2.0",
     "react-bootstrap": "^2.7.4",
     "react-dom": "^18.2.0",
@@ -19,6 +20,7 @@
     "react-minimal-pie-chart": "^8.4.0",
     "react-responsive": "^9.0.2",
     "react-scripts": "5.0.1",
+    "react-select": "^5.7.3",
     "recharts": "^2.6.2",
     "victory": "^36.6.10",
     "web-vitals": "^2.1.4"

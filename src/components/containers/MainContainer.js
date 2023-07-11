@@ -4,7 +4,7 @@ import HeaderContainer from './HeaderContainer';
 import TopContainer from './TopContainer';
 import BottomContainer from './BottomContainer';
 import SideContainer from './SideContainer';
-import LegendContainer from './LegendContainer';
+import FilterContainer from './FilterContainer';
 
 const MainContainer = ({ calls, lastUpdated }) => {
   return (
@@ -14,6 +14,7 @@ const MainContainer = ({ calls, lastUpdated }) => {
           {lastUpdated && (
             <Col xs={12} style={{ height: '100%' }}>
               <HeaderContainer lastUpdated={lastUpdated} />
+              <FilterContainer />
             </Col>
           )}
           <Col lg={12} xl={8} className='d-flex flex-column' style={{ height: '100%' }}>
