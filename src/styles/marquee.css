@@ -1,0 +1,37 @@
+.marquee-h {
+  overflow: hidden;
+  white-space: nowrap;
+  animation: marquee-h 30s linear infinite;
+  width: min-content; /* Add this property */
+  padding: 0 15px; /* Add this property */
+  box-sizing: border-box; /* Add this property */
+}
+
+@keyframes marquee-h {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+.marquee-v {
+  overflow: hidden;
+  white-space: nowrap;
+  animation: marquee-v 120s linear infinite;
+  padding: 5px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+
+@keyframes marquee-v {
+  0% {
+    transform: translateY(10%);
+  }
+  100% {
+    transform: translateY(-100%);
+  }
+}

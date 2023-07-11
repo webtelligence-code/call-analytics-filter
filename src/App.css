@@ -1,0 +1,78 @@
+.app {
+  height: 100vh; /* Set the app height to full viewport height */
+  overflow: hidden; /* Hide any overflow outside the app container */
+}
+
+.full-height-row {
+  height: 100%; /* Set the row height to full parent height */
+}
+
+.scrollable-col {
+  height: 100%; /* Set the column height to full parent height */
+  overflow-y: auto; /* Enable vertical scrolling if content exceeds the height */
+}
+
+.side-container-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.custom-container {
+  background-color: whitesmoke;
+  padding: 20px;
+}
+
+.chart-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  background-color: gray;
+}
+
+.lost-calls-container {
+  background-color: #c62828;
+  border-radius: 15px;
+  color: 'white';
+  padding-block: 10px;
+}
+
+.call-missed-container {
+  background-color: #c62828;
+  border-radius: 15px;
+  padding: 5px
+}
+
+.list-item-title-badge {
+  background-color: #ed6337;
+  border-radius: 5px;
+  max-width: max-content;
+  padding-inline: 10px;
+  color: 'white';
+  fill: 'white';
+}
+
+.horizontal-bar {
+  border-top: 1px solid #a3a2a2;
+  margin-block: 10px;
+}
+
+.vertical-bar {
+  border-right: 1px solid #a3a2a2;
+  margin-inline: 10px;
+}
+
+.side-container-item {
+  padding: 16px;
+  border-bottom: 1px solid #e8e8e8;
+}
+
+.side-container-item-title {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.side-container-item-description {
+  margin-top: 8px;
+}
