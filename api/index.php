@@ -21,8 +21,7 @@ switch ($method) {
       case 'get_current_user':
         $response = getCurrentUser();
         break;
-      case 'get_users':
-        $concessions = isset($_GET['concessions']) ? $_GET['concessions'] : '';
+      case 'get_concessions':
         $response = getUsers($concessions);
         break;
       case 'get_sales_boss_concessions':
