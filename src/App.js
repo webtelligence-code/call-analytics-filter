@@ -9,6 +9,7 @@ const API_URL = 'https://amatoscar.pt/gap/NovasPlataformas/_API/call-analytics-f
 
 function App() {
   const [calls, setCalls] = useState({});
+  const [concessions, setConcessions] = useState([]);
   const [currentUser, setCurrentUser] = useState({});
   const [lastUpdated, setLastUpdated] = useState('');
 
@@ -34,6 +35,7 @@ function App() {
       }
     })
     .then((response) => {
+      setConcessions(response.data);
       console.log(chalk.black.bgGreen('Concessions fetched successfully.'), response.data);
     })
     .catch((error) => {
@@ -79,7 +81,7 @@ function App() {
     };
   }, []);
 
-  return <MainContainer calls={calls} lastUpdated={lastUpdated} />;
+  return <MainContainer calls={calls} concessions={concessions} lastUpdated={lastUpdated} />;
 }
 
 export default App;

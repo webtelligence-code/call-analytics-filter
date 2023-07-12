@@ -13,45 +13,28 @@ $conn = $databaseObj->connect();
 // Function that will user's session data
 
 // Function that will fetch all users (guests) from the database
-function getUsers($concessions)
+function getConcessions()
 {
   global $conn;
 
-  if (is_array($concessions)) {
-    $concessionsList = "'" . implode("', '", array_column($concessions, 'concessao')) . "'";
-  } else {
-    $concessionsList = "'" . $concessions . "'";
-  }
+  $sql = "SELECT concessao FROM tbconcessoes WHERE GerentePosVenda = ?";
 
-  if ($_SESSION['USERNAME'] == 'pedromatos@AM098') {
-    $sql = "SELECT nameDisplay, userIcar, concessao, funcao, departamento FROM tbusers 
-            WHERE ativo = 1 
-            AND colaborador = 1
-            AND departamento = 'Pós Venda'
-            AND funcao IN ('Pintor', 'Lavador', 'Mecânico', 'Bate Chapas')
-            ORDER BY nameDisplay ASC";
-  } else {
-    $sql = "SELECT nameDisplay, userIcar, concessao, funcao, departamento FROM tbusers 
-          WHERE ativo = 1 
-          AND colaborador = 1
-          AND departamento = 'Pós Venda'
-          AND funcao IN ('Pintor', 'Lavador', 'Mecânico', 'Bate Chapas')
-          AND concessao IN ($concessionsList)
-          ORDER BY nameDisplay ASC";
-  }
+  $stmt = $conn->prepare($sql);
+  $stmt->bind_param('s', $_SESSION['USERNAME']);
+  $stmt->execute();
+  $result = $stmt->get_result();
 
-  $result = $conn->query($sql);
-
-  $users = array();
+  $concessions = array();
   if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
-      $users[] = $row;
+      $concessions[] = $row['concessao'];
     }
+    $concessions = array_values(array_unique($concessions)); // Remove duplicates
   } else {
     echo "No data found";
   }
 
-  return $users;
+  return $concessions;
 }
 
 function getCurrentUser()

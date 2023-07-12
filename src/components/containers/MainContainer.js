@@ -6,7 +6,7 @@ import BottomContainer from './BottomContainer';
 import SideContainer from './SideContainer';
 import FilterContainer from './FilterContainer';
 
-const MainContainer = ({ calls, lastUpdated }) => {
+const MainContainer = ({ calls, concessions, lastUpdated }) => {
   return (
     <div className='app'>
       <Container fluid className='p-3'>
@@ -14,7 +14,7 @@ const MainContainer = ({ calls, lastUpdated }) => {
           {lastUpdated && (
             <Col xs={12} style={{ height: '100%' }}>
               <HeaderContainer lastUpdated={lastUpdated} />
-              <FilterContainer />
+              <FilterContainer concessions={concessions} />
             </Col>
           )}
           <Col lg={12} xl={8} className='d-flex flex-column' style={{ height: '100%' }}>
