@@ -9,8 +9,8 @@ import chalk from 'chalk';
 
 const MainContainer = ({ currentUser, calls, departments, cities, concessions, lastUpdated }) => {
   const [city, setCity] = useState('ALL');
-  const [concession, setConcession] = useState('');
-  const [department, setDepartment] = useState('');
+  const [concession, setConcession] = useState('ALL');
+  const [department, setDepartment] = useState('ALL');
   const [filteredConcessions, setFilteredConcessions] = useState([]);
 
   // Controller for changing filter states
