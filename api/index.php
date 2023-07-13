@@ -21,6 +21,12 @@ switch ($method) {
       case 'get_current_user':
         $response = getCurrentUser();
         break;
+      case 'get_cities':
+        $response = getCities();
+        break;
+      case 'get_all_departments':
+        $response = getAllDepartments();
+        break;
       case 'get_concessions':
         $response = getConcessions();
         break;

@@ -9,7 +9,9 @@ const API_URL = 'https://amatoscar.pt/gap/NovasPlataformas/_API/call-analytics-f
 
 function App() {
   const [calls, setCalls] = useState({});
+  const [departments, setDepartments] = useState([]);
   const [concessions, setConcessions] = useState([]);
+  const [cities, setCities] = useState([]);
   const [currentUser, setCurrentUser] = useState({});
   const [lastUpdated, setLastUpdated] = useState('');
 
@@ -28,19 +30,49 @@ function App() {
       })
   }
 
+  const getAllDepartments = () => {
+    axios.get(API_URL, {
+      params: {
+        action: 'get_all_departments'
+      }
+    })
+      .then((response) => {
+        setDepartments(response.data);
+        console.log(chalk.black.bgGreen('Current User data fetched.'), response.data);
+      })
+      .catch((error) => {
+        console.log(chalk.black.bgRed('Error fetching current user data.'), error);
+      })
+  }
+
   const getConcessions = () => {
     axios.get(API_URL, {
       params: {
         action: 'get_concessions'
       }
     })
-    .then((response) => {
-      setConcessions(response.data);
-      console.log(chalk.black.bgGreen('Concessions fetched successfully.'), response.data);
+      .then((response) => {
+        setConcessions(response.data);
+        console.log(chalk.black.bgGreen('Concessions fetched successfully.'), response.data);
+      })
+      .catch((error) => {
+        console.log(chalk.black.bgRed('Error fetching concessions from database.'), error);
+      })
+  }
+
+  const getCities = () => {
+    axios.get(API_URL, {
+      params: {
+        action: 'get_cities'
+      }
     })
-    .catch((error) => {
-      console.log(chalk.black.bgRed('Error fetching concessions from database.'), error);
-    })
+      .then((response) => {
+        setCities(response.data);
+        console.log(chalk.black.bgGreen('Cities fetched successfully.'), response.data);
+      })
+      .catch((error) => {
+        console.log(chalk.black.bgRed('Error fetching concessions from database.'), error);
+      })
   }
 
   const getCallData = () => {
@@ -62,7 +94,10 @@ function App() {
   useEffect(() => {
     // Fetch current user data first
     getCurrentUser();
-
+    // Fetch all cities
+    getCities()
+    // Fetch all departments
+    getAllDepartments()
     // Fetch concessions data second.
     getConcessions();
 
@@ -81,7 +116,14 @@ function App() {
     };
   }, []);
 
-  return <MainContainer calls={calls} concessions={concessions} lastUpdated={lastUpdated} />;
+  return <MainContainer
+    currentUser={currentUser}
+    calls={calls}
+    departments={departments}
+    cities={cities}
+    concessions={concessions}
+    lastUpdated={lastUpdated}
+  />;
 }
 
 export default App;

@@ -5,40 +5,36 @@ import React from 'react'
 import { Card, Col, Row } from 'react-bootstrap'
 import Select from 'react-select'
 
-const FilterContainer = ({ concessions }) => {
+const FilterContainer = ({ currentUser, cities, departments, concessions, changeFilter }) => {
+  // Full access departments 
+  const departmentFullAccess = ['Informática', 'Contact Center', 'Administrativo'];
 
+  // State to determine if user has access to department select filter
+  const hasDepartmentAccess = departmentFullAccess.includes(currentUser.departamento);
 
   // Select options
-  const cityOptions = [
-    { value: 'Portalegre', label: <label>Portalegre<FontAwesomeIcon icon={faCity} className='ms-2' /></label> },
-    { value: 'Beja', label: <label>Beja<FontAwesomeIcon icon={faCity} className='ms-2' /></label> },
-    { value: 'Castelo Branco', label: <label>Castelo Branco<FontAwesomeIcon icon={faCity} className='ms-2' /></label> },
-    { value: 'Guarda', label: <label>Guarda<FontAwesomeIcon icon={faCity} className='ms-2' /></label> },
-  ];
-
+  const cityOptions = cities.map((key) => ({
+    value: key,
+    label: <label>{key} <FontAwesomeIcon icon={faCity} className='ms-2' /></label>
+  }))
   const concessionOptions = concessions.map((key) => ({
     value: key,
     label: <label key={key}>{key} <FontAwesomeIcon icon={faBuilding} /></label>
   }));
-
-  const departmentOptions = [
-    { value: 'Informática', label: <label>Informática<FontAwesomeIcon icon={faBuilding} className='ms-2' /></label> }
-  ];
+  const departmentOptions = departments.map((key) => ({
+    value: key,
+    label: <label>{key} <FontAwesomeIcon icon={faBuildingUser} /></label>
+  }));
 
   // OnChange event Listeners
-  const handleCityOnChange = (selectedConcession) => {
-    if (selectedConcession) console.log(chalk.green(selectedConcession.value))
-    else console.log(chalk.red('No city selected.'))
+  const handleCityOnChange = (selectedCity) => {
+    changeFilter('city', selectedCity ? selectedCity.value : 'ALL')
   }
-
   const handleConcessionOnChange = (selectedConcession) => {
-    if (selectedConcession) console.log(chalk.green(selectedConcession.value))
-    else console.log(chalk.red('No concession selected.'))
+    changeFilter('city', selectedConcession ? selectedConcession.value : 'ALL')
   }
-
   const handleDepartmentOnChange = (selectedDepartament) => {
-    if (selectedDepartament) console.log(chalk.green(selectedDepartament.value))
-    else console.log(chalk.red('No department selected.'))
+    changeFilter('city', selectedDepartament ? selectedDepartament.value : 'ALL')
   }
 
   return (
@@ -54,7 +50,7 @@ const FilterContainer = ({ concessions }) => {
           borderRadius: '5px',
         }}
       >
-        <Row>
+        <Row className='text-center justify-content-center'>
           <Col md={12} lg={4}>
             <Select
               className='w-100'
@@ -77,16 +73,18 @@ const FilterContainer = ({ concessions }) => {
             />
           </Col>
 
-          <Col md={12} lg={4}>
-            <Select
-              className='w-100'
-              onChange={handleDepartmentOnChange}
-              placeholder={<label>Filtrar departamento<FontAwesomeIcon icon={faBuilding} className='ms-2' /></label>}
-              name='department'
-              isClearable
-              options={departmentOptions}
-            />
-          </Col>
+          {hasDepartmentAccess && (
+            <Col md={12} lg={4}>
+              <Select
+                className='w-100'
+                onChange={handleDepartmentOnChange}
+                placeholder={<label>Filtrar departamento<FontAwesomeIcon icon={faBuilding} className='ms-2' /></label>}
+                name='department'
+                isClearable
+                options={departmentOptions}
+              />
+            </Col>
+          )}
         </Row>
       </Card.Header>
     </Card>
