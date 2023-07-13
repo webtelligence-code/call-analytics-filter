@@ -31,6 +31,7 @@ const MainContainer = ({ currentUser, calls, departments, cities, concessions, l
     }
   }
 
+  // Use effect controller to change the concessions associated to selected city
   useEffect(() => {
     let filteredConcessions = [];
 
