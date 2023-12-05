@@ -4,7 +4,7 @@ import { List } from 'antd';
 import ListItemDescription from '../utility/ListItemDescription';
 import { IoIosCall } from 'react-icons/io';
 
-const SideContainer = ({ percentagens }) => {
+const ConcessionCallsContainer = ({ percentagens }) => {
   const extensoesArray =
     percentagens &&
     Object.entries(percentagens)
@@ -16,7 +16,7 @@ const SideContainer = ({ percentagens }) => {
       });
 
   return (
-    <Card className="shadow" style={{ height: '100%' }}>
+    <Card className="shadow">
       <Card.Header
         className="text-center shadow-sm"
         style={{
@@ -29,8 +29,7 @@ const SideContainer = ({ percentagens }) => {
       >
         Piores Concessões (teste)
       </Card.Header>
-      <Card.Body style={{ overflow: 'hidden', position: 'relative' }}>
-        <div className={extensoesArray && 'marquee-v'}>
+      <Card.Body>
           <List
             itemLayout="horizontal"
             dataSource={extensoesArray}
@@ -58,10 +57,9 @@ const SideContainer = ({ percentagens }) => {
               </List.Item>
             )}
           />
-        </div>
       </Card.Body>
     </Card>
   );
 };
 
-export default SideContainer;
+export default ConcessionCallsContainer;

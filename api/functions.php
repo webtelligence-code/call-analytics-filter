@@ -26,9 +26,9 @@ function getCities()
     $stmt = $conn->prepare($sql);
     $stmt->bind_param('s', $_SESSION['USERNAME']);
   }
-  
+
   $stmt->execute();
-  $result = $stmt->get_result(); 
+  $result = $stmt->get_result();
 
   $cities = array();
   if ($result->num_rows > 0) {
@@ -57,7 +57,10 @@ function getAllDepartments()
   $departments = array();
   if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
-      $departments[] = $row['departamento'];
+      $department = $row['departamento'];
+      if (!empty($department) && $department !== 'teste') {
+        $departments[] = $department;
+      }
     }
     $departments = array_values(array_unique($departments)); // Remove duplicates
   } else {
@@ -65,6 +68,70 @@ function getAllDepartments()
   }
 
   return $departments;
+}
+
+function getGroupedConcessions()
+{
+  global $conn;
+
+  $sql = "
+    SELECT concessao, departamento
+    FROM tbusers
+    WHERE concessao <> ''
+    ORDER BY concessao, departamento
+  ";
+
+  $stmt = $conn->prepare($sql);
+  $stmt->execute();
+  $result = $stmt->get_result();
+
+  $concessions = array();
+  while ($row = $result->fetch_assoc()) {
+    $concession = $row['concessao'];
+    $department = $row['departamento'];
+
+    if (!isset($concessions[$concession])) {
+      $concessions[$concession] = array();
+    }
+
+    if (!in_array($department, $concessions[$concession])) {
+      $concessions[$concession][] = $department;
+    }
+  }
+
+  return $concessions;
+}
+
+function getGroupedCities()
+{
+  global $conn;
+
+  $sql = "
+    SELECT cidade, departamento
+    FROM tbusers
+    WHERE cidade <> ''
+    ORDER BY cidade, departamento
+  ";
+
+  $stmt = $conn->prepare($sql);
+  $stmt->execute();
+  $result = $stmt->get_result();
+
+  $cities = array();
+  while ($row = $result->fetch_assoc()) {
+    $city = $row['cidade'];
+    $department = $row['departamento'];
+
+    if (!isset($cities[$city])) {
+      $cities[$city] = array();
+    }
+
+    if (!in_array($department, $cities[$city])) {
+      $cities[$city][] = $department;
+    }
+  }
+
+  return $cities;
 }
 
 // Function that will fetch all users (guests) from the database

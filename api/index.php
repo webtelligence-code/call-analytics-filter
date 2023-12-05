@@ -27,6 +27,12 @@ switch ($method) {
       case 'get_all_departments':
         $response = getAllDepartments();
         break;
+      case 'get_grouped_cities':
+        $response = getGroupedCities();
+        break;
+      case 'get_grouped_concessions':
+        $response = getGroupedConcessions();
+        break;
       case 'get_concessions':
         $response = getConcessions();
         break;

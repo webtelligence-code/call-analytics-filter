@@ -1,30 +1,38 @@
 import React, { useEffect, useState } from 'react'
 import { Col, Container, Row } from 'react-bootstrap'
 import HeaderContainer from './HeaderContainer';
-import TopContainer from './TopContainer';
-import BottomContainer from './BottomContainer';
-import SideContainer from './SideContainer';
+import ExternalCallsContainer from './ExternalCallsContainer';
+import InternalCallsContainer from './InternalCallsContainer';
+import ConcessionCallsContainer from './ConcessionCallsContainer';
 import FilterContainer from './FilterContainer';
 import chalk from 'chalk';
 
-const MainContainer = ({ currentUser, calls, departments, cities, concessions, lastUpdated }) => {
-  const [city, setCity] = useState('ALL');
-  const [concession, setConcession] = useState('ALL');
-  const [department, setDepartment] = useState('ALL');
+const MainContainer = ({ currentUser, calls, departments, cities, concessions, lastUpdated, groupedConcessions, groupedCities }) => {
+  const [selectedCity, setSelectedCity] = useState(null);
+  const [selectedConcession, setSelectedConcession] = useState(null);
+  const [selectedDepartment, setSelectedDepartment] = useState(null);
   const [filteredConcessions, setFilteredConcessions] = useState([]);
+  const [filteredDepartments, setFilteredDepartments] = useState([]);
+
+  console.log('Grouped Cities ->', groupedCities)
 
   // Controller for changing filter states
   const changeFilter = (type, filter) => {
     switch (type) {
       case 'city':
-        setCity(filter);
-        console.log(filter)
+        setSelectedConcession(null);
+        setSelectedCity(filter);
+        setSelectedDepartment(null); // Reset selected department when concession changes
+        console.log(chalk.green('Selected City ->'), filter);
         break;
       case 'concession':
-        setConcession(filter);
+        setSelectedConcession(filter);
+        setSelectedDepartment(null); // Reset selected department when concession changes
+        console.log(chalk.green('Selected Concession ->'), filter);
         break;
       case 'department':
-        setDepartment(filter);
+        setSelectedDepartment(filter);
+        console.log(chalk.green('Selected Department ->'), filter);
         break;
       default:
         console.log(chalk.dark.bgRed('Invalid type for changeFilter function'));
@@ -35,43 +43,69 @@ const MainContainer = ({ currentUser, calls, departments, cities, concessions, l
   useEffect(() => {
     let filteredConcessions = [];
 
-    if (city === 'ALL') {
+    if (!selectedCity) {
       filteredConcessions = concessions;
     } else {
-      filteredConcessions = concessions.filter((concession) => concession.includes(city))
+      const formattedSelectedCity = selectedCity.normalize('NFD').replace(/[\u0300-\u036f]/g, ''); // Remove accents from selected city
+      filteredConcessions = concessions.filter((concession) =>
+        concession.normalize('NFD').replace(/[\u0300-\u036f]/g, '').includes(formattedSelectedCity)
+      );
     }
 
     setFilteredConcessions(filteredConcessions);
-  }, [city, concessions])
+
+    // If only one concession is filtered, select it
+    if (filteredConcessions.length === 1) {
+      console.log(chalk.yellow('Only one concession filtered ->'), filteredConcessions[0])
+      setSelectedConcession(filteredConcessions[0]);
+    } else {
+      setSelectedConcession(null);
+    }
+  }, [concessions, selectedCity]);
+
+  useEffect(() => {
+    let filteredDepartments = [];
+
+    if (!selectedConcession) {
+      if (groupedCities[selectedCity]) {
+        filteredDepartments = groupedCities[selectedCity];
+      } else {
+        filteredDepartments = departments;
+      }
+    } else {
+      const selectedConcessionObj = groupedConcessions[selectedConcession];
+      filteredDepartments = selectedConcessionObj || [];
+    }
+
+    setFilteredDepartments(filteredDepartments);
+  }, [selectedCity, selectedConcession, groupedConcessions, groupedCities, departments]);
+
 
   return (
-    <div className='app'>
-      <Container fluid className='p-3'>
-        <Row className='full-height-row' >
-          {lastUpdated && (
-            <Col xs={12} style={{ height: '100%' }}>
-              <HeaderContainer lastUpdated={lastUpdated} />
-              <FilterContainer
-                currentUser={currentUser}
-                cities={cities}
-                concessions={filteredConcessions}
-                departments={departments}
-                changeFilter={changeFilter}
-              />
-            </Col>
-          )}
-          <Col lg={12} xl={8} className='d-flex flex-column' style={{ height: '100%' }}>
-            <TopContainer calls={calls} />
-            <BottomContainer calls={calls} />
+    <Container className='p-3'>
+      <Row>
+        {lastUpdated && (
+          <Col xs={12}>
+            <HeaderContainer lastUpdated={lastUpdated} />
+            <FilterContainer
+              currentUser={currentUser}
+              cities={cities}
+              concessions={filteredConcessions}
+              departments={filteredDepartments}
+              changeFilter={changeFilter}
+              selectedCity={selectedCity}
+              selectedConcession={selectedConcession}
+              selectedDepartment={selectedDepartment}
+            />
           </Col>
-          <Col lg={12} xl={4}>
-            <div className='side-container-wrapper' style={{ height: '100%' }}>
-              <SideContainer percentagens={calls.Percentagens} />
-            </div>
-          </Col>
-        </Row>
-      </Container>
-    </div>
+        )}
+        <Col xl={12}>
+          <ExternalCallsContainer calls={calls} />
+          <InternalCallsContainer calls={calls} />
+          <ConcessionCallsContainer percentagens={calls.Percentagens} />
+        </Col>
+      </Row>
+    </Container>
   )
 }
 

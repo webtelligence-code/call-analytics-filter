@@ -14,6 +14,8 @@ function App() {
   const [cities, setCities] = useState([]);
   const [currentUser, setCurrentUser] = useState({});
   const [lastUpdated, setLastUpdated] = useState('');
+  const [groupedConcessions, setGroupedConcessions] = useState([]);
+  const [groupedCities, setGroupedCities] = useState([]);
 
   const getCurrentUser = () => {
     axios.get(API_URL, {
@@ -39,6 +41,36 @@ function App() {
       .then((response) => {
         setDepartments(response.data);
         console.log(chalk.black.bgGreen('Current User data fetched.'), response.data);
+      })
+      .catch((error) => {
+        console.log(chalk.black.bgRed('Error fetching current user data.'), error);
+      })
+  }
+
+  const getGroupedCities = () => {
+    axios.get(API_URL, {
+      params: {
+        action: 'get_grouped_cities'
+      }
+    })
+      .then((response) => {
+        setGroupedCities(response.data);
+        console.log(chalk.black.bgGreen('Grouped departments data fetched.'), response.data);
+      })
+      .catch((error) => {
+        console.log(chalk.black.bgRed('Error fetching current user data.'), error);
+      })
+  }
+
+  const getGroupedConcessions = () => {
+    axios.get(API_URL, {
+      params: {
+        action: 'get_grouped_concessions'
+      }
+    })
+      .then((response) => {
+        setGroupedConcessions(response.data);
+        console.log(chalk.black.bgGreen('Grouped departments data fetched.'), response.data);
       })
       .catch((error) => {
         console.log(chalk.black.bgRed('Error fetching current user data.'), error);
@@ -97,7 +129,11 @@ function App() {
     // Fetch all cities
     getCities()
     // Fetch all departments
-    getAllDepartments()
+    getAllDepartments();
+    // Fetch Grouped Departments
+    getGroupedConcessions();
+    // Fetch Grouped Cities
+    getGroupedCities();
     // Fetch concessions data second.
     getConcessions();
 
@@ -123,6 +159,8 @@ function App() {
     cities={cities}
     concessions={concessions}
     lastUpdated={lastUpdated}
+    groupedConcessions={groupedConcessions}
+    groupedCities={groupedCities}
   />;
 }
 

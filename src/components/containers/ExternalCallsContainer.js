@@ -1,20 +1,17 @@
-import React from 'react'
-import Charts from '../utility/Charts'
-import { Card, Spinner } from 'react-bootstrap'
-import { useMediaQuery } from 'react-responsive';
 import { Badge } from 'antd';
-import { IoIosCall } from 'react-icons/io';
+import React from 'react'
+import { Card, Spinner } from 'react-bootstrap'
 import CallsInfo from '../utility/CallsInfo';
+import { IoIosCall } from "react-icons/io";
+import Charts from '../utility/Charts';
 
-const BottomContainer = ({ calls }) => {
-  const isSmallScreen = useMediaQuery({ maxWidth: 768 }); // Defauld bootstrap value
-
+const ExternalCallsContainer = ({ calls }) => {
   return (
-    <Card className={`shadow text-center ${isSmallScreen ? 'mb-3' : ''}`} style={{ width: '100%' }}>
+    <Card className='mb-3 shadow'>
       <Badge.Ribbon
         placement='end'
         text={
-          calls.totalInternas ? (
+          calls.totalExternos ? (
             <label
               style={{
                 display: 'flex',
@@ -25,7 +22,7 @@ const BottomContainer = ({ calls }) => {
             >
               Total:
               <IoIosCall className='mx-2' size={20} />
-              {calls.totalInternas}
+              {calls.totalExternos}
             </label>
           ) : (
             <Spinner style={{ color: 'white' }} size='sm'>
@@ -34,6 +31,7 @@ const BottomContainer = ({ calls }) => {
           )
         }
         color='#ed6337'
+        style={{ height: 'auto' }}
       >
         <Card.Header
           className='text-center shadow-sm'
@@ -44,33 +42,34 @@ const BottomContainer = ({ calls }) => {
           }}
           as={'h5'}
         >
-          Chamadas Internas
+          Chamadas Externas
         </Card.Header>
       </Badge.Ribbon>
+
       <Card.Body style={{display: 'flex', flexDirection: 'column', justifyContent: 'center'}}>
         <CallsInfo
-          recebidas={calls.recebidasInternas}
+          recebidas={calls.recebidas}
           devolvidas={null}
           nDevolvidas={null}
-          perdidas={calls.perdidasInternas}
-          efetuadas={calls.efetuadasInternas}
+          perdidas={calls.perdidas}
+          efetuadas={calls.efetuadas}
           show={[true, false, false, true, true]}
         />
-        {calls.totalInternas && (
+        {calls.totalExternos && (
           <Charts
-          show={[false, true, true, false, false]}
-          recebidas={calls.recebidasInternas}
-          devolvidas={calls.DevolvidasInternas}
-          nDevolvidas={calls.NDevolvidasInternas}
-          perdidas={calls.perdidasInternas}
-          efetuadas={calls.efetuadasInternas}
-          total={calls.totalInternas}
-          personTypeLabel={'Colaboradores'}
-        />
+            show={[false, true, true, false, false]}
+            recebidas={calls.recebidas}
+            devolvidas={calls.Devolvidas}
+            nDevolvidas={calls.NDevolvidas}
+            perdidas={calls.perdidas}
+            efetuadas={calls.efetuadas}
+            total={calls.totalExternos}
+            personTypeLabel={'Clientes'}
+          />
         )}
       </Card.Body>
-    </Card>
+    </Card >
   )
 }
 
-export default BottomContainer
+export default ExternalCallsContainer
